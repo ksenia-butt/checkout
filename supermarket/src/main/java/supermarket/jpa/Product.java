@@ -4,10 +4,10 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "product")
+@NamedEntityGraph(name = "graph.product.promotion",
+        attributeNodes = @NamedAttributeNode(value = "promotion", subgraph = "promotion"))
 public class Product {
     @Id
-    @GeneratedValue
-    private Long id;
     @Column(name = "sku", nullable = false)
     private String sku;
     @Column(name = "product_name", nullable = false)
@@ -15,12 +15,15 @@ public class Product {
     @Column(name = "price")
     private Integer price;
 
-    public Long getId() {
-        return id;
+    @OneToOne(mappedBy = "product", fetch = FetchType.LAZY)
+    private Promotion promotion;
+
+    public Promotion getPromotion() {
+        return promotion;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setPromotion(Promotion promotion) {
+        this.promotion = promotion;
     }
 
     public String getSku() {
@@ -46,4 +49,5 @@ public class Product {
     public void setPrice(Integer price) {
         this.price = price;
     }
+
 }

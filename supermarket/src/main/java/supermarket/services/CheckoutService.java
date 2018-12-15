@@ -21,6 +21,7 @@ public class CheckoutService {
         Map<String, Integer> aggregatedProducts = aggregateItems(items);
         for(String productSku : aggregatedProducts.keySet()){
             Product product = productDao.findProduct(productSku);
+            System.out.println("Promo: " + product.getPromotion().getQuantity() +" for £" + product.getPromotion().getPricePerQuantity());
             int quantity = aggregatedProducts.get(productSku);
             totalPrice = totalPrice + (product.getPrice() * quantity);
         }

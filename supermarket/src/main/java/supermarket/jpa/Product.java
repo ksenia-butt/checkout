@@ -20,6 +20,6 @@ public class Product {
     @Column(name = "price")
     private Integer price;
 
-    @OneToOne(mappedBy = "product", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "product", fetch = FetchType.EAGER)
     private Promotion promotion;
 }

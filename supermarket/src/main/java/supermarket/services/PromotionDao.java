@@ -18,16 +18,25 @@ public class PromotionDao {
     }
 
     public Promotion addPromotion(final PromotionRequest request){
+        Product product = getProduct(request.getSku());
         Promotion promotion = Promotion.builder()
                 .quantity(request.getQuantity())
                 .pricePerQuantity(request.getPricePerQuantity())
-                .product(getProduct(request.getSku()))
+                .product(product)
                 .build();
-        //TODO figure out what happens if one already exists
+        deleteAnyExistingPromotionForProduct(product);
         return promotionRepository.save(promotion);
     }
 
+    private void deleteAnyExistingPromotionForProduct(final Product product) {
+        Promotion existingPromotion = promotionRepository.findByProduct(product);
+        if(existingPromotion != null){
+            promotionRepository.delete(existingPromotion);
+        }
+    }
+
     private Product getProduct(final String sku) {
+        //todo add check for null
         return productRepository.findBySku(sku);
     }
 }

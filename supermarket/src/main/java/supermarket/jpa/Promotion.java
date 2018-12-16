@@ -1,5 +1,6 @@
 package supermarket.jpa;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,9 +10,11 @@ import javax.persistence.*;
 @Table(name = "promotion")
 @Getter
 @Setter
+@Builder
 public class Promotion {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
     @Column(name = "quantity", nullable = false)
     private Integer quantity;

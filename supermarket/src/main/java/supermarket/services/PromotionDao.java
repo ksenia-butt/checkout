@@ -3,22 +3,21 @@ package supermarket.services;
 import org.springframework.stereotype.Service;
 import supermarket.domain.PromotionRequest;
 import supermarket.jpa.Product;
-import supermarket.jpa.ProductRepository;
 import supermarket.jpa.Promotion;
 import supermarket.jpa.PromotionRepository;
 
 @Service
 public class PromotionDao {
     private PromotionRepository promotionRepository;
-    private ProductRepository productRepository;
+    private ProductDao productDao;
 
-    public PromotionDao(PromotionRepository promotionRepository, ProductRepository productRepository) {
+    public PromotionDao(PromotionRepository promotionRepository, ProductDao productDao) {
         this.promotionRepository = promotionRepository;
-        this.productRepository = productRepository;
+        this.productDao = productDao;
     }
 
-    public Promotion addPromotion(final PromotionRequest request){
-        Product product = getProduct(request.getSku());
+    public Promotion addPromotion(final PromotionRequest request) {
+        Product product = productDao.getProduct(request.getSku());
         Promotion promotion = Promotion.builder()
                 .quantity(request.getQuantity())
                 .pricePerQuantity(request.getPricePerQuantity())
@@ -30,13 +29,8 @@ public class PromotionDao {
 
     private void deleteAnyExistingPromotionForProduct(final Product product) {
         Promotion existingPromotion = promotionRepository.findByProduct(product);
-        if(existingPromotion != null){
+        if (existingPromotion != null) {
             promotionRepository.delete(existingPromotion);
         }
-    }
-
-    private Product getProduct(final String sku) {
-        //todo add check for null
-        return productRepository.findBySku(sku);
     }
 }

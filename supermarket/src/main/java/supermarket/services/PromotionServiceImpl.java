@@ -5,10 +5,10 @@ import supermarket.domain.PromotionRequest;
 import supermarket.jpa.Promotion;
 
 @Service
-public class PromotionImplService implements PromotionService{
+public class PromotionServiceImpl implements PromotionService {
     private PromotionDao promotionDao;
 
-    public PromotionImplService(PromotionDao promotionDao) {
+    PromotionServiceImpl(PromotionDao promotionDao) {
         this.promotionDao = promotionDao;
     }
 

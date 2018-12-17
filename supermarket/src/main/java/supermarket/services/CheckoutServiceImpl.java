@@ -14,10 +14,10 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class CheckoutImplService implements CheckoutService {
+public class CheckoutServiceImpl implements CheckoutService {
     private ProductDao productDao;
 
-    public CheckoutImplService(ProductDao productDao) {
+    CheckoutServiceImpl(ProductDao productDao) {
         this.productDao = productDao;
     }
 
@@ -31,7 +31,7 @@ public class CheckoutImplService implements CheckoutService {
             final Product product = productDao.getProduct(sku);
             final int quantity = aggregatedProducts.get(sku);
             final int totalPriceForProduct = calculateProductTotalPrice(product, quantity);
-            if (product.getPromotion() != null) {
+            if (isPromotionApplicable(product, quantity)) {
                 appliedPromotions.add(createAppliedPromotion(product.getPromotion()));
             }
             purchaseItemInfoList.add(createPurchaseItem(product, quantity, totalPriceForProduct));
@@ -44,6 +44,12 @@ public class CheckoutImplService implements CheckoutService {
                 .currency(Currency.GBP)
                 .build();
     }
+
+    private boolean isPromotionApplicable(final Product product, final int quantityOfItems) {
+        Promotion promotion = product.getPromotion();
+        return promotion != null && quantityOfItems >= promotion.getQuantity();
+    }
+
 
     private AppliedPromotion createAppliedPromotion(final Promotion promotion) {
         String promotionInfo = promotion.getProduct().getProductName() + ": Get " + promotion.getQuantity() + " for "
@@ -63,7 +69,7 @@ public class CheckoutImplService implements CheckoutService {
 
     private int calculateProductTotalPrice(final Product product, final int quantityOfItems) {
         Promotion promotion = product.getPromotion();
-        if (promotion != null && quantityOfItems >= promotion.getQuantity()) {
+        if (isPromotionApplicable(product, quantityOfItems)) {
             return applyPromotionToPrice(product, promotion, quantityOfItems);
         } else {
             return product.getPrice() * quantityOfItems;

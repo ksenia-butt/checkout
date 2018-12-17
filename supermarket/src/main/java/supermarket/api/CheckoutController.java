@@ -11,14 +11,14 @@ import java.util.List;
 
 @RestController
 public class CheckoutController {
-private CheckoutService checkoutService;
+    private CheckoutService checkoutService;
 
     public CheckoutController(CheckoutService checkoutService) {
         this.checkoutService = checkoutService;
     }
 
     @GetMapping("/totalPrice")
-    public TotalPriceResponse getTotalPrice(@RequestParam @NotBlank List<String> items){
+    public TotalPriceResponse getTotalPrice(@RequestParam @NotBlank List<String> items) {
         return checkoutService.calculateTotalPrice(items);
     }
 }

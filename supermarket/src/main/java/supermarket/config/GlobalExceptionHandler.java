@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import supermarket.exception.ProductNotFoundException;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,9 +18,18 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-    public @ResponseBody ExceptionInfo handleException(HttpServletRequest request, Exception ex){
+    public @ResponseBody
+    ExceptionInfo handleException(HttpServletRequest request, Exception ex) {
         LOGGER.error("Responding with generic Internal Error. Exception occurred = {} ", ex.getMessage());
         return new ExceptionInfo(request.getRequestURL().toString(), "Internal Error");
+    }
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public @ResponseBody
+    ExceptionInfo handleProductNotFoundException(HttpServletRequest request, Exception ex) {
+        LOGGER.error("Responding with bad request as product could not be found.", ex.getMessage());
+        return new ExceptionInfo(request.getRequestURL().toString(), "Bad Request");
     }
 
     @AllArgsConstructor

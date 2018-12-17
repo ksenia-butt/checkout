@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class CheckoutImplService implements CheckoutService{
+public class CheckoutImplService implements CheckoutService {
     private ProductDao productDao;
 
     public CheckoutImplService(ProductDao productDao) {
@@ -28,7 +28,7 @@ public class CheckoutImplService implements CheckoutService{
         Map<String, Integer> aggregatedProducts = aggregateItems(skus);
         int totalPrice = 0;
         for (String sku : aggregatedProducts.keySet()) {
-            final Product product = productDao.findProduct(sku);
+            final Product product = productDao.getProduct(sku);
             final int quantity = aggregatedProducts.get(sku);
             final int totalPriceForProduct = calculateProductTotalPrice(product, quantity);
             if (product.getPromotion() != null) {

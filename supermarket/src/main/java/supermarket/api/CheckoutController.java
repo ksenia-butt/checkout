@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RestController;
 import supermarket.domain.TotalPriceResponse;
 import supermarket.services.CheckoutService;
 
-import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @RestController
@@ -18,7 +17,7 @@ public class CheckoutController {
     }
 
     @GetMapping("/totalPrice")
-    public TotalPriceResponse getTotalPrice(@RequestParam @NotBlank List<String> items) {
+    public TotalPriceResponse getTotalPrice(@RequestParam List<String> items) {
         return checkoutService.calculateTotalPrice(items);
     }
 }

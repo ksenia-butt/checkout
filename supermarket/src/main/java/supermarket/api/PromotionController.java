@@ -2,6 +2,7 @@ package supermarket.api;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,8 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 import supermarket.domain.PromotionRequest;
 import supermarket.jpa.Promotion;
 import supermarket.services.PromotionService;
-
-import javax.validation.Valid;
 
 import static net.logstash.logback.marker.Markers.append;
 
@@ -26,7 +25,7 @@ public class PromotionController {
 
     //TODO add an endpoint to post multiple promotions at a time (check doesn't contain same product promos)
     @PostMapping
-    public void addPromotion(@Valid @RequestBody PromotionRequest promotionRequest) {
+    public void addPromotion(@Validated @RequestBody PromotionRequest promotionRequest) {
         LOGGER.info(append("sku", promotionRequest.getSku())
                         .and(append("quantity", promotionRequest.getQuantity()))
                         .and(append("pricePerQuantity", promotionRequest.getPricePerQuantity())),

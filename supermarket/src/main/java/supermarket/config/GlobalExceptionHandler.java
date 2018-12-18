@@ -1,9 +1,12 @@
 package supermarket.config;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -32,9 +35,19 @@ public class GlobalExceptionHandler {
         return new ExceptionInfo(request.getRequestURL().toString(), "Bad Request");
     }
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public @ResponseBody
+    ExceptionInfo handleInvalidRequestException(HttpServletRequest request, Exception ex) {
+        LOGGER.error("Responding with bad request as request validation failed.", ex.getMessage());
+        return new ExceptionInfo(request.getRequestURL().toString(), "Bad Request");
+    }
+
     @AllArgsConstructor
-    private class ExceptionInfo {
+    public class ExceptionInfo {
+        @JsonProperty
         private String url;
-        private String messsage;
+        @JsonProperty
+        private String message;
     }
 }

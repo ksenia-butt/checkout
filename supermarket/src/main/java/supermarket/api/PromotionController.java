@@ -23,7 +23,6 @@ public class PromotionController {
         this.promotionService = promotionService;
     }
 
-    //TODO add an endpoint to post multiple promotions at a time (check doesn't contain same product promos)
     @PostMapping
     public void addPromotion(@Validated @RequestBody PromotionRequest promotionRequest) {
         LOGGER.info(append("sku", promotionRequest.getSku())

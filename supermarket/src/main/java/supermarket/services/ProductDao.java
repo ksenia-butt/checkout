@@ -17,6 +17,7 @@ public class ProductDao {
     }
 
     public Product getProduct(final String sku) {
+        LOGGER.info("Attempting to retrieve product by SKU={}", sku);
         Product product = productRepository.findBySku(sku);
         if (product != null) {
             return product;
